@@ -3,6 +3,10 @@
 #include <cstring>
 #include <ctime>
 #include <unistd.h>
+#include <fcntl.h>
+#include <termios.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 /** Nodo para lista enlazada simple (genérico) */
 template<typename T>
@@ -161,11 +165,68 @@ public:
  * @brief Programa principal
  * Lee comandos por stdin y actúa sobre los sensores
  */
-int main(){
+static FILE* open_input_path(const char* path){
+    struct stat st;
+    if(stat(path, &st) == 0 && S_ISCHR(st.st_mode)){
+        int fd = open(path, O_RDWR | O_NOCTTY | O_SYNC);
+        if(fd < 0) return nullptr;
+        struct termios tty;
+        if(tcgetattr(fd, &tty) == 0){
+            cfsetospeed(&tty, B9600);
+            cfsetispeed(&tty, B9600);
+            tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8; 
+            tty.c_iflag &= ~IGNBRK;
+            tty.c_lflag = 0;
+            tty.c_oflag = 0;
+            tty.c_cc[VMIN]  = 1;
+            tty.c_cc[VTIME] = 1;
+            tty.c_iflag &= ~(IXON | IXOFF | IXANY);
+            tty.c_cflag |= (CLOCAL | CREAD);
+            tty.c_cflag &= ~(PARENB | PARODD);
+            tty.c_cflag &= ~CSTOPB;
+            tcsetattr(fd, TCSANOW, &tty);
+        }
+        return fdopen(fd, "r+");
+    } else {
+        return fopen(path, "r");
+    }
+}
+
+static void process_line(const char* line, Manager& mgr){
+    if(!line) return;
+    char buf[200]; std::strncpy(buf, line, sizeof(buf)-1); buf[sizeof(buf)-1]=0;
+    for(int i=(int)std::strlen(buf)-1;i>=0;i--){ if(buf[i]=='\n' || buf[i]=='\r') buf[i]=0; else break; }
+    char* toks[4]; int t=0;
+    char* p = std::strtok(buf, " :\t");
+    while(p && t<4){ toks[t++]=p; p = std::strtok(NULL, " :\t"); }
+    if(t==3){ 
+        mgr.registrarPorTipo(toks[0], toks[1], toks[2]);
+        std::printf("%s: ok\n", toks[1]);
+    } else if(t==2){ 
+        SensorBase* s = mgr.find(toks[0]);
+        if(s){ s->addLectura(toks[1]); std::printf("%s: agregado\n", toks[0]); }
+        else {
+            if(std::strchr(toks[1], '.')){ mgr.addSensor(new SensorTemperatura(toks[0])); mgr.find(toks[0])->addLectura(toks[1]); std::printf("%s: creado y agregado\n", toks[0]); }
+            else { mgr.addSensor(new SensorPresion(toks[0])); mgr.find(toks[0])->addLectura(toks[1]); std::printf("%s: creado y agregado\n", toks[0]); }
+        }
+    }
+}
+
+int main(int argc, char** argv){
     Manager mgr;
     char cmd[20];
     std::srand(std::time(nullptr));
     bool interactive = isatty(fileno(stdin));
+    if(argc > 1){
+        FILE* f = open_input_path(argv[1]);
+        if(!f){ std::printf("no puedo abrir %s\n", argv[1]); return 1; }
+        char line[256];
+        while(fgets(line, sizeof(line), f)){
+            process_line(line, mgr);
+        }
+        if(f != stdin) fclose(f);
+        return 0;
+    }
     if(interactive){
         while(true){
             int opt=0;
