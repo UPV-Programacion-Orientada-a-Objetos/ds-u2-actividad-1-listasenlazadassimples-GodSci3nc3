@@ -56,7 +56,3 @@ Archivos generados por este cambio
 - `README_SPEC.md` : copia del README original (especificación del profesor).
 - `README.md` : este README de uso rápido.
 
-Siguientes pasos recomendados:
-
-- Ejecutar `make doc` para generar docs HTML en `build/docs/html`.
-- Generar `INFORME.md` y añadir capturas si se requiere PDF.
