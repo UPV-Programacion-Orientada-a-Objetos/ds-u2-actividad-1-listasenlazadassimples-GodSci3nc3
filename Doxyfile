@@ -1,0 +1,12 @@
+# Minimal Doxyfile generated for the assignment
+PROJECT_NAME           = "Sistema IoT Sensores"
+OUTPUT_DIRECTORY       = docs
+RECURSIVE              = NO
+INPUT                  = main.cpp mainpage(example).dox
+FILE_PATTERNS          = *.cpp *.h *.dox
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+EXTRACT_ALL            = YES
+QUIET                  = YES
+WARNINGS               = NO
+OPTIMIZE_OUTPUT_FOR_C  = NO

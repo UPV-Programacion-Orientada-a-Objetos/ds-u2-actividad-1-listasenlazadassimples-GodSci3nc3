@@ -1,0 +1,12 @@
+# Doxyfile mínimo para generar docs en docs/html
+PROJECT_NAME           = "Sistema IoT Sensores - Arturo Rosales V"
+OUTPUT_DIRECTORY       = docs/html
+RECURSIVE              = NO
+INPUT                  = ../main.cpp docs/mainpage.dox
+FILE_PATTERNS          = *.cpp *.h *.dox
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+EXTRACT_ALL            = YES
+QUIET                  = NO
+WARNINGS               = YES
+OPTIMIZE_OUTPUT_FOR_C  = NO

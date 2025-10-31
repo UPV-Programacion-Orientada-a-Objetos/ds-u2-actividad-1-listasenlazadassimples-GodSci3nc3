@@ -1,0 +1,26 @@
+/**
+ * @mainpage Sistema de Gestión Polimórfica de Sensores para IoT
+ *
+ * @section intro_sec Introducción
+ *
+ * Este documento recoge la documentación del proyecto desarrollado por
+ * Arturo Rosales V para la asignatura "Estructura de datos".
+ *
+ * @section features_sec Características
+ * - Polimorfismo: jerarquía SensorBase y clases derivadas.
+ * - Listas enlazadas genéricas: template ListaSensor<T>.
+ * - Lectura desde puerto serial (Arduino) y desde archivos de texto.
+ * - Documentación generada con Doxygen.
+ *
+ * @section usage_sec Uso básico
+ * Compilar con CMake y ejecutar el binario `iot_monitor`.
+ * Ver `README.md` para instrucciones detalladas.
+ *
+ * @section author_sec Autor
+ *
+ * **Arturo Rosales V**
+ * 
+ * Asignatura: Estructura de datos
+ * Universidad Politécnica de Valencia
+ * Octubre 2025
+ */
