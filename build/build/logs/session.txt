@@ -1,5 +1,0 @@
-Compilando proyecto...
-/home/arthur/Escritorio/PoliWorks/Practicas/ds-u2-actividad-1-listasenlazadassimples-GodSci3nc3/scripts/record_session.sh: línea 12: cmake: orden no encontrada
-\nEjecutando pruebas con samples/lecturas.txt
-Ejecutable no encontrado en build/iot_monitor
-\nContenido de logs/session.txt
