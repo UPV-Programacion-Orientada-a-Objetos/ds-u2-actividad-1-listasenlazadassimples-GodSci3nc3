@@ -1,0 +1,8 @@
+agregartemp T-001
+leer T-001 45.3
+leer T-001 42.1
+agregarpres P-105
+leer P-105 80
+leer P-105 85
+procesar
+salir
